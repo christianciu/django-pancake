@@ -1,4 +1,13 @@
-from django.template.base import Lexer, TokenType
+from django.template.base import Lexer
+
+try:
+    from django.template.base import TokenType
+    TOKEN_BLOCK = TokenType.BLOCK
+    TOKEN_TEXT = TokenType.TEXT
+    TOKEN_VAR = TokenType.VAR
+except ImportError:
+    from django.template.base import TOKEN_BLOCK, TOKEN_TEXT, TOKEN_VAR
+
 import os
 import re
 
@@ -63,7 +72,7 @@ class Parser(object):
         self.stack = [self.root]
         self.current = self.root
         self.tokens = Lexer(self.templates[template_name]).tokenize()
-        _TOKEN_TEXT, _TOKEN_VAR, _TOKEN_BLOCK = TokenType.TEXT, TokenType.VAR, TokenType.block
+        _TOKEN_TEXT, _TOKEN_VAR, _TOKEN_BLOCK = TOKEN_TEXT, TOKEN_VAR, TOKEN_BLOCK
         while self.tokens:
             token = self.next_token()
 
@@ -125,7 +134,7 @@ class Parser(object):
         # Consume all tokens until 'endcomment'
         while self.tokens:
             token = self.next_token()
-            if token.token_type == TokenType.BLOCK:
+            if token.token_type == TOKEN_BLOCK:
                 try:
                     tag_name, arg = token.contents.split(None, 1)
                 except ValueError:
