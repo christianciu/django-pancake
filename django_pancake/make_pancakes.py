@@ -14,7 +14,7 @@ def template_names(input_dir, prefix=''):
 def make_pancakes(input_dir, output_dir):
     templates = TemplateDirectory(input_dir)
     for template_name in template_names(input_dir):
-        print "Writing %s" % template_name
+        print("Writing %s" % template_name)
         pancake = flatten(template_name, templates)
         outfile = os.path.join(output_dir, template_name)
         try:
